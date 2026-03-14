@@ -1,0 +1,50 @@
+#include <iostream>
+using namespace std;
+
+class EWallet
+{
+private:
+    float balance;
+
+public:
+    EWallet()
+    {
+        balance = 0;
+    }
+
+    void set_balance(float bal)
+    {
+        if(bal >= 0)
+            balance = bal;
+        else
+            cout << "Invalid balance!" << endl;
+    }
+
+    void spend(float amount)
+    {
+        if(amount > 0 && amount <= balance)
+            balance -= amount;
+        else
+            cout << "Payment declined!" << endl;
+    }
+
+    float get_balance()
+    {
+        return balance;
+    }
+};
+
+int main()
+{
+    EWallet w;
+
+    float initial, spend;
+
+    cin >> initial;
+    cin >> spend;
+
+    w.set_balance(initial);
+    w.spend(spend);
+
+    cout << "Final balance: " << w.get_balance() << endl;
+}
