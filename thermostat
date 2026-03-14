@@ -1,0 +1,39 @@
+#include <iostream>
+using namespace std;
+
+class Thermostat
+{
+private:
+    int temperature;
+
+public:
+    Thermostat()
+    {
+        temperature = 24;
+    }
+
+    void set_temperature(int temp)
+    {
+        if(temp >= 16 && temp <= 30)
+            temperature = temp;
+        else
+            cout << "Invalid temperature!" << endl;
+    }
+
+    int get_temperature()
+    {
+        return temperature;
+    }
+};
+
+int main()
+{
+    Thermostat t;
+    int input;
+
+    cin >> input;
+
+    t.set_temperature(input);
+
+    cout << "Current temperature: " << t.get_temperature() << endl;
+}
