@@ -1,0 +1,143 @@
+#include <iostream>
+using namespace std;
+
+enum SpotStatus
+{
+    EMPTY,
+    OCCUPIED,
+    RESERVED
+};
+
+class ParkingGarage
+{
+private:
+    SpotStatus garage[3][4];
+    int parked_count[3];
+
+public:
+    ParkingGarage()
+    {
+        for(int i=0;i<3;i++)
+        {
+            parked_count[i] = 0;
+
+            for(int j=0;j<4;j++)
+                garage[i][j] = EMPTY;
+        }
+
+        garage[0][0] = RESERVED;
+    }
+
+    bool set_spot_status(int floor, int spot, SpotStatus status)
+    {
+        if(floor < 0 || floor > 2 || spot < 0 || spot > 3)
+            return false;
+
+        SpotStatus current = garage[floor][spot];
+
+        if(status == OCCUPIED && current == EMPTY)
+        {
+            garage[floor][spot] = OCCUPIED;
+            parked_count[floor]++;
+            return true;
+        }
+
+        if(status == EMPTY && current == OCCUPIED)
+        {
+            garage[floor][spot] = EMPTY;
+            parked_count[floor]--;
+            return true;
+        }
+
+        if(status == RESERVED && current == EMPTY)
+        {
+            garage[floor][spot] = RESERVED;
+            return true;
+        }
+
+        return false;
+    }
+
+    SpotStatus get_spot_status(int floor, int spot)
+    {
+        return garage[floor][spot];
+    }
+
+    int get_parked_count(int floor)
+    {
+        return parked_count[floor];
+    }
+
+    SpotStatus (*getGarage())[4]
+    {
+        return garage;
+    }
+};
+
+char status_to_char(SpotStatus s)
+{
+    if(s == EMPTY) return 'E';
+    if(s == OCCUPIED) return 'O';
+    return 'R';
+}
+
+void print_garage_map(const SpotStatus garage[3][4])
+{
+    cout << "Garage Map:" << endl;
+
+    for(int i=0;i<3;i++)
+    {
+        for(int j=0;j<4;j++)
+            cout << status_to_char(garage[i][j]) << " ";
+
+        cout << endl;
+    }
+}
+
+int count_empty_spots(const SpotStatus garage[3][4])
+{
+    int count = 0;
+
+    for(int i=0;i<3;i++)
+        for(int j=0;j<4;j++)
+            if(garage[i][j] == EMPTY)
+                count++;
+
+    return count;
+}
+
+int main()
+{
+    ParkingGarage pg;
+
+    int n;
+    cin >> n;
+
+    for(int i=0;i<n;i++)
+    {
+        char op;
+        int floor, spot;
+
+        cin >> op >> floor >> spot;
+
+        if(op == 'P')
+            pg.set_spot_status(floor, spot, OCCUPIED);
+
+        if(op == 'L')
+            pg.set_spot_status(floor, spot, EMPTY);
+
+        if(op == 'R')
+            pg.set_spot_status(floor, spot, RESERVED);
+    }
+
+    SpotStatus (*garage)[4] = pg.getGarage();
+
+    print_garage_map(garage);
+
+    cout << endl << "Parked Count Per Floor:" << endl;
+
+    for(int i=0;i<3;i++)
+        cout << "Floor " << i << ": " << pg.get_parked_count(i) << endl;
+
+    cout << endl << "Total empty spots: " << count_empty_spots(garage) << endl;
+}
