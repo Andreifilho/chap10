@@ -1,0 +1,39 @@
+#include <iostream>
+using namespace std;
+
+class QuizResult
+{
+private:
+    int score;
+
+public:
+    QuizResult()
+    {
+        score = 0;
+    }
+
+    void setScore(int s)
+    {
+        if(s >= 0 && s <= 100)
+            score = s;
+        else
+            cout << "Invalid score!" << endl;
+    }
+
+    int getScore()
+    {
+        return score;
+    }
+};
+
+int main()
+{
+    QuizResult q;
+    int input;
+
+    cin >> input;
+
+    q.setScore(input);
+
+    cout << "Final score: " << q.getScore() << endl;
+}
